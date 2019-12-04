@@ -45,7 +45,7 @@ export default class Auth extends React.Component {
         try {
             const res = await axios.post("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDEQpB29OMwG5MLTNwmyL8Uuhjeo4It1s0", authData);
             console.log(res.data);
-        } catch (e) {
+        } catch (e) { 
             console.log(e);
         }
     }
