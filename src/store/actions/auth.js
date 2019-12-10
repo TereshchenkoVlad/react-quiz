@@ -38,17 +38,34 @@ export function authSuccess (token) {
 export function autoLogOut (time) {
     return dispatch => {
         setTimeout(() => {
-            dispatch(logOut());
+            dispatch(logout());
         }, time * 1000);
     }
 }
 
-export function logOut () {
+export function logout () {
     localStorage.removeItem("token");
     localStorage.removeItem("userId"); 
     localStorage.removeItem("expirationData");
 
     return {
         type: AUTH_LOG_OUT
+    }
+}
+
+export function autoLogin () {
+    return dispatch => {
+        const token = localStorage.getItem("token");
+        if (!token){
+            dispatch(logout());
+        } else {
+            const expirationDate = new Date(localStorage.getItem("expirationData"));
+            if (expirationDate <= new Date()) {
+                dispatch(logout());
+            } else {
+                dispatch(authSuccess(token));
+                dispatch(autoLogOut((expirationDate.getTime() - new Date().getTime()) / 1000 ));
+            }
+        }
     }
 }
